@@ -112,11 +112,11 @@ def run():
         if ml['type'] == 'addCustomEmoji':
             emoji = ml['info']['emoji']
             if config['use_cw_add']:
-                cw = f"{config['message_emoji_add']} :{emoji['name']}:"
+                cw = f"{config['messages']['emoji_add']} :{emoji['name']}:"
                 header = ""
             else:
                 cw = None
-                header = f"{config['message_emoji_add']} :{emoji['name']}:\n\n"
+                header = f"{config['messages']['emoji_add']} :{emoji['name']}:\n\n"
             text =  header + \
                     "<small>" \
                     f"name        : `:{emoji['name']}:`\n" \

@@ -2,5 +2,13 @@
     "host": "example.tld",
     "app_name": "EmoijBot",
     "description": "絵文字とデコレーションの更新を通知します",
-    "permission": ["read:admin:show-moderation-log", "write:notes"]
+    "permission": [
+        "read:account",
+        "write:notes",
+        "read:drive",
+        "write:drive",
+        "read:admin:show-moderation-log",
+        "read:admin:emoji",
+        "write:admin:emoji"
+    ]
 }

@@ -1,26 +1,32 @@
 {
     "host": "example.tld",
-    "token": "xxxxxxxxxxxxxxxx",
+    "token": "XXXXXXXXXXXXXXXX",
     "moderation_logs_limit": 5,
     "running_interval_seconds": 60,
-    "visibility_add": "public",
-    "visibility_update": "public",
-    "visibility_delete": "public",
-    "use_cw_add": true,
-    "use_cw_update": true,
-    "use_cw_delete": true,
+    "visibility": {
+        "add": "public",
+        "update": "home",
+        "delete": "home"
+    },
+    "use_cw": {
+        "add": false,
+        "use_cw_update": false,
+        "use_cw_delete": false
+    },
     "local_only": true,
     "reaction_acceptance": null,
-    "message_emoji_add": "新しい絵文字が追加されました。",
-    "message_emoji_add_user": "追加したユーザー",
-    "message_emoji_update": "絵文字が更新されました。",
-    "message_emoji_update_user": "更新したユーザー",
-    "message_emoji_delete": "絵文字が削除されました。",
-    "message_emoji_delete_user": "削除したユーザー",
-    "message_decoration_add": "新しいアバターデコレーションが追加されました。",
-    "message_decoration_add_user": "追加したユーザー",
-    "message_decoration_update": "アバターデコレーションが更新されました。",
-    "message_decoration_update_user": "更新したユーザー",
-    "message_decoration_delete": "アバターデコレーションが削除されました。",
-    "message_decoration_delete_user": "削除したユーザー"
+    "messages": {
+        "emoji_add": "新しい絵文字が追加されました。",
+        "emoji_add_user": "追加したユーザー",
+        "emoji_update": "絵文字が更新されました。",
+        "emoji_update_user": "更新したユーザー",
+        "emoji_delete": "絵文字が削除されました。",
+        "emoji_delete_user": "削除したユーザー",
+        "decoration_add": "新しいアバターデコレーションが追加されました。",
+        "decoration_add_user": "追加したユーザー",
+        "decoration_update": "アバターデコレーションが更新されました。",
+        "decoration_update_user": "更新したユーザー",
+        "decoration_delete": "アバターデコレーションが削除されました。",
+        "decoration_delete_user": "削除したユーザー"
+    }
 }

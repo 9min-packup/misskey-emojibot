@@ -42,11 +42,11 @@ params ={
 r  = requests.post(f"https://{config['host']}/api/auth/session/userkey", json=params)
 print(r)
 if r.status_code != 200 :
-    print("ユーザーキー取得でエラーが発生しました。")
+    print("トークン取得でエラーが発生しました。")
     print(r.text)
     exit()
 
-print("ユーザーキー取得完了")
+print("トークン取得完了")
 
 userkey_info = json.loads(r.text)
 print(f"userkey : {userkey_info['accessToken']}")
