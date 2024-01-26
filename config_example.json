@@ -1,6 +1,7 @@
 {
     "host": "example.tld",
     "token": "XXXXXXXXXXXXXXXX",
+    "is_dry_run": false,
     "moderation_logs_limit": 5,
     "running_interval_seconds": 60,
     "visibility": {

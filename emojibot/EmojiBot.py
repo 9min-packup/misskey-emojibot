@@ -1,5 +1,7 @@
 from .config import Config
 from .misskey_api import *
+from .logger import *
+import datetime
 import time
 import sys
 
@@ -9,26 +11,30 @@ class EmojiBot:
     def __init__(self, config_dict):
         self.config = Config(config_dict)
         self.api = MisskeyApi(self.config.host, self.config.token)
-        print("emojibot initializing...")
+        self.logger = Logger()
+        self.logger.log("emojibot initializing...")
         # ユーザー情報を取得
         try:
             self.user = self.api.show_user()
         except BadApiRequestException as e:
+            self.logger.log(f"{datetime.datetime.today()}, show_user failure", color = Color.RED)
             print(e)
-            print("initialize failure")
+            self.logger.log("initialize failure", color = Color.RED)
             sys.exit(1)
+        self.logger.log(f"{datetime.datetime.today()}, show_user success", color = Color.GREEN)
         # 最新のモデレーションログの id を取得
         try:
             moderation_logs = self.api.show_moderation_logs(limit = 1)
         except BadApiRequestException as e:
             print(e)
-            print("initialize failure")
+            self.logger.log("initialize failure", color = Color.RED)
             sys.exit(1)
+        self.logger.log(f"{datetime.datetime.today()}, show_moderation_logs success", color = Color.GREEN)
         self.sinceId = moderation_logs[0].id if len(moderation_logs) >= 1 else None
-        print("initialize success")
+        self.logger.log("initialize success")
 
     def run(self):
-        print("emojibot start")
+        self.logger.log("emojibot start")
         while True:
             self._run()
             time.sleep(self.config.running_interval_seconds)
@@ -38,10 +44,12 @@ class EmojiBot:
             try:
                 moderation_logs = self.api.show_moderation_logs(limit=self.config.moderation_logs_limit)
             except BadApiRequestException as e:
+                self.logger.log(f"{datetime.datetime.today()}, show_moderation_logs failure", color = Color.RED)
                 print(e)
                 return None
+            self.logger.log(f"{datetime.datetime.today()}, show_moderation_logs success", color = Color.GREEN)
             if len(moderation_logs) == 0:
-                print("no moderationlog.")
+                self.logger.log("no moderationlog.")
                 return None
             # sinceId を指定しなかった場合はログが新しい順になっているので古い順に変える
             moderation_logs.reverse()
@@ -49,10 +57,12 @@ class EmojiBot:
             try:
                 moderation_logs = self.api.show_moderation_logs(limit=self.config.moderation_logs_limit, sinceId=self.sinceId)
             except BadApiRequestException as e:
+                self.logger.log(f"{datetime.datetime.today()}, show_moderation_logs failure", color = Color.RED)
                 print(e)
                 return None
+            self.logger.log(f"{datetime.datetime.today()}, show_moderation_logs success", color = Color.GREEN)
             if len(moderation_logs) == 0:
-                print("no moderationlog.")
+                self.logger.log("no moderationlog.")
                 return None
 
         # since_id を更新する
@@ -166,11 +176,18 @@ class EmojiBot:
                     f"name        : `:{emoji.name}:`\n" \
                     f"{message_user}:@{moderation_log.user.username}" \
                     "</small>"
-        try:
-            self.api.create_note(text, cw = cw, visibility = visibility, localOnly = local_only, reactionAcceptance = reaction_acceptance)
-        except BadApiRequestException as e:
-            print(e)
-            return None
+        if self.config.is_dry_run:
+            # dry_run のときは投稿しない
+            self.logger.log("not posting due to dry run")
+            self.logger.log(text, color = Color.CYAN)
+        else:
+            try:
+                self.api.create_note(text, cw = cw, visibility = visibility, localOnly = local_only, reactionAcceptance = reaction_acceptance)
+            except BadApiRequestException as e:
+                self.logger.log(f"{datetime.datetime.today()}, create_note failure", color = Color.RED)
+                print(e)
+                return None
+            self.logger.log(f"{datetime.datetime.today()}, create_note success", color = Color.GREEN)
 
     def create_decoration_note(self, decoration, moderation_log, message_header, message_user, visibility, local_only, reaction_acceptance, use_cw, is_delete=False):
         if not is_delete:
@@ -199,8 +216,16 @@ class EmojiBot:
                     f"name        : `{decoration.name}`\n" \
                     f"{message_user}:@{moderation_log.user.username}" \
                     "</small>"
-        try:
-            self.api.create_note(text, cw = cw, visibility = visibility, localOnly = local_only, reactionAcceptance = reaction_acceptance)
-        except BadApiRequestException as e:
-            print(e)
-            return None
+        if self.config.is_dry_run:
+            # dry_run のときは投稿しない
+            self.logger.log("not posting due to dry run")
+            self.logger.log(text, color = Color.CYAN)
+        else:
+            try:
+                self.api.create_note(text, cw = cw, visibility = visibility, localOnly = local_only, reactionAcceptance = reaction_acceptance)
+            except BadApiRequestException as e:
+                self.logger.log(f"{datetime.datetime.today()}, create_note failure", color = Color.RED)
+                print(e)
+                return None
+            self.logger.log(f"{datetime.datetime.today()}, create_note success", color = Color.GREEN)
+

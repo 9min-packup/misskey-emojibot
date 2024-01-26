@@ -1,7 +1,6 @@
 from .model import *
 from .exception import *
 import requests
-import datetime
 import json
 
 class MisskeyApi:
@@ -21,10 +20,7 @@ class MisskeyApi:
         }
         r  = self.request_api("i", params)
         if r.status_code != 200:
-            print(f"{datetime.datetime.today()}, show_user failure")
             raise BadApiRequestException(r.status_code, r.text)
-        else:
-            print(f"{datetime.datetime.today()}, show_user success")
         return User(json.loads(r.text))
         
     def create_note(self, text, cw = None, visibility = "public", localOnly = True, reactionAcceptance = None):
@@ -38,11 +34,8 @@ class MisskeyApi:
         }
         r  = self.request_api("notes/create", params)
         if r.status_code != 200:
-            print(f"{datetime.datetime.today()}, create_note failure")
             raise BadApiRequestException(r.status_code, r.text)
-        else:
-            print(f"{datetime.datetime.today()}, create_note success")
-
+       
     def show_moderation_logs(self, limit = 5, type = None, sinceId = None, untilId = None, userId = None):
         params ={
             'i': self.token,
@@ -56,10 +49,7 @@ class MisskeyApi:
             params["untilId"] = untilId
         r  = self.request_api("admin/show-moderation-logs", params)
         if r.status_code != 200:
-            print(f"{datetime.datetime.today()}, show_moderation_logs failure")
             raise BadApiRequestException(r.status_code, r.text)
-        else:
-            print(f"{datetime.datetime.today()}, show_moderation_logs success")
         array = json.loads(r.text)
         moderation_logs = []
         for i in array:
