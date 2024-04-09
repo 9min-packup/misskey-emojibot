@@ -50,8 +50,8 @@ pip install requests
     },
     "use_cw": {
         "add": false,
-        "use_cw_update": false,
-        "use_cw_delete": false
+        "update": false,
+        "delete": false
     },
     "local_only": true,
     "reaction_acceptance": null,
