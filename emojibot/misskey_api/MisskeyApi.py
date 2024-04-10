@@ -22,8 +22,26 @@ class MisskeyApi:
         if r.status_code != 200:
             raise BadApiRequestException(r.status_code, r.text)
         return User(json.loads(r.text))
-        
-    def create_note(self, text, cw = None, visibility = "public", localOnly = True, reactionAcceptance = None):
+
+    def search_user_by_id(self, userId):
+        params ={
+            "userId":  userId 
+        }
+        r  = self.request_api("users/show", params)
+        if r.status_code != 200:
+            raise BadApiRequestException(r.status_code, r.text)
+        return User(json.loads(r.text))
+
+    def search_user_by_username(self, username):
+        params ={
+            "username":  username
+        }
+        r  = self.request_api("users/show", params)
+        if r.status_code != 200:
+            raise BadApiRequestException(r.status_code, r.text)
+        return User(json.loads(r.text))
+
+    def create_note(self, text, cw = None, visibility = "public", visibleUserIds = None, localOnly = True, reactionAcceptance = None):
         params ={
             "i": self.token,
             "text": text,
@@ -32,6 +50,11 @@ class MisskeyApi:
             "localOnly":  localOnly,
             "reactionAcceptance": reactionAcceptance,
         }
+        if visibility == "specified" and visibleUserIds is not None and visibleUserIds is not []:
+            if isinstance(visibleUserIds, list):
+                params["visibleUserIds"] = visibleUserIds
+            else:
+                params["visibleUserIds"] = [visibleUserIds]
         r  = self.request_api("notes/create", params)
         if r.status_code != 200:
             raise BadApiRequestException(r.status_code, r.text)
