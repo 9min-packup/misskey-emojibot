@@ -179,6 +179,14 @@ class EmojiBot:
 
 
     def create_emoji_note(self, emoji, moderation_log, message_header, message_user, visibility, visible_usernames, visible_user_ids, local_only, reaction_acceptance, use_cw, use_mention, is_delete = False):
+        TEXT_LEN_LIMIT = 512
+        aliases = f"{emoji.aliases}"
+        if len(aliases) > TEXT_LEN_LIMIT:
+            aliases = aliases[0:(TEXT_LEN_LIMIT - 3)] + "..."
+        license = f"{emoji.license}"
+        if len(license) > TEXT_LEN_LIMIT:
+            license = license[0:(TEXT_LEN_LIMIT - 3)] + "..."
+
         header_mention = ""
         if visibility == "specified":
             for username in visible_usernames:
@@ -191,7 +199,7 @@ class EmojiBot:
         if not is_delete:
             if use_cw:
                 cw = f"{message_header} :{emoji.name}:"
-                header = f"{header_mention}"
+                header = f"{header_mention}\n"
             else:
                 cw = None
                 header = f"{header_mention}\n{message_header} :{emoji.name}:\n\n"
@@ -199,8 +207,8 @@ class EmojiBot:
                     "<small>" \
                     f"name        : `:{emoji.name}:`\n" \
                     f"category    : `{emoji.category}`\n" \
-                    f"tags        : `{emoji.aliases}`\n" \
-                    f"license     : `{emoji.license}`\n" \
+                    f"tags        : `{aliases}`\n" \
+                    f"license     : `{license}`\n" \
                     f"isSensitive : `{emoji.isSensitive}`\n" \
                     f"localOnly   : `{emoji.localOnly}`\n\n" \
                     f"{footer_mention}" \
@@ -208,7 +216,7 @@ class EmojiBot:
         else :
             if use_cw:
                 cw = f"{message_header}"
-                header = f"{header_mention}"
+                header = f"{header_mention}\n"
             else:
                 cw = None
                 header = f"{header_mention}\n{message_header}\n\n"
@@ -231,6 +239,12 @@ class EmojiBot:
             self.logger.log(f"{datetime.datetime.today()}, create_note success", color = Color.GREEN)
 
     def create_decoration_note(self, decoration, moderation_log, message_header, message_user, visibility, visible_usernames, visible_user_ids, local_only, reaction_acceptance, use_cw, use_mention, is_delete = False):
+        TEXT_LEN_LIMIT = 512
+
+        description = f"{decoration.description}"
+        if len(description) > TEXT_LEN_LIMIT:
+            description = description[0:(TEXT_LEN_LIMIT - 3)] + "..."
+
         header_mention = ""
         if visibility == "specified":
             for username in visible_usernames:
@@ -243,7 +257,7 @@ class EmojiBot:
         if not is_delete:
             if use_cw:
                 cw = f"{message_header} : `{decoration.name}`"
-                header = f"{header_mention}"
+                header = f"{header_mention}\n"
             else:
                 cw = None
                 header = f"{header_mention}\n{message_header}\n\n"
@@ -251,13 +265,13 @@ class EmojiBot:
                     "<small>" \
                     f"name        : `{decoration.name}`\n" \
                     f"url         : {decoration.url}\n" \
-                    f"description : `{decoration.description}`\n" \
+                    f"description : `{description}`\n" \
                     f"{footer_mention}" \
                     "</small>"
         else :
             if use_cw:
                 cw = f"{message_header}"
-                header = f"{header_mention}"
+                header = f"{header_mention}\n"
             else:
                 cw = None
                 header = f"{header_mention}\n{message_header}\n\n"
