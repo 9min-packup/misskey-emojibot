@@ -1,7 +1,6 @@
 {
     "host": "example.tld",
     "token": "XXXXXXXXXXXXXXXX",
-    "is_dry_run": false,
     "moderation_logs_limit": 5,
     "running_interval_seconds": 60,
     "visibility": {
@@ -9,6 +8,7 @@
         "update": "home",
         "delete": "home"
     },
+    "visible_usernames": ["your_account_id"],
     "use_cw": {
         "add": false,
         "update": false,
@@ -16,6 +16,7 @@
     },
     "local_only": true,
     "reaction_acceptance": null,
+    "use_mention" : true,
     "messages": {
         "emoji_add": "新しい絵文字が追加されました。",
         "emoji_add_user": "追加したユーザー",
